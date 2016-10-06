@@ -14,18 +14,6 @@
 
 using namespace std;
 
-void CreateDir()
-{
-		if (CreateDirectory((LPCWSTR)"D:\\deskMod\\images", NULL)) 
-		{
-			cout << "success";
-		}
-		else 
-		{
-			cout << "error";
-		}
-}
-
 vector<LPCSTR> CreateDownloadPaths(vector<LPCSTR> &urls)
 {
 	vector<LPCSTR> paths;
@@ -54,8 +42,6 @@ vector<LPCSTR> CreateDownloadPaths(vector<LPCSTR> &urls)
 void ChangeBackground(vector<LPCSTR> paths)
 {
 	u_int i = 0;
-//if (paths.size() > 0)
-//	cout << paths[0];
 	while (true)
 	{
 		SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)paths[i%paths.size()], SPIF_UPDATEINIFILE);
