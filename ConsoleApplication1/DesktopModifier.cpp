@@ -14,21 +14,8 @@
 
 using namespace std;
 
-void CreateDir()
+void CreateDownloadPaths(vector<LPCSTR> urls, vector<LPCSTR> &paths)
 {
-		if (CreateDirectory((LPCWSTR)"D:\\deskMod\\images", NULL)) 
-		{
-			cout << "success";
-		}
-		else 
-		{
-			cout << "error";
-		}
-}
-
-vector<LPCSTR> CreateDownloadPaths(vector<LPCSTR> &urls)
-{
-	vector<LPCSTR> paths;
 	for (u_int i = 0; i < urls.size(); i++)
 	{
 		char fp[20];
@@ -49,7 +36,6 @@ vector<LPCSTR> CreateDownloadPaths(vector<LPCSTR> &urls)
 	{
 		cout << paths[i];
 	}
-	return paths;
 }
 void ChangeBackground(vector<LPCSTR> paths)
 {
@@ -77,12 +63,13 @@ int main()
 {
 	//FreeConsole();
 	vector<LPCSTR> urls = { "https://4.bp.blogspot.com/-TmA6nbLk9XQ/UxIoVsqYNLI/AAAAAAAAoRg/4rHuQWzbJdI/s0/Battlefield+4_HD.jpg", "https://images.alphacoders.com/505/505347.jpg", "http://www.mindblowingpicture.com/wp_highres/aviation/WP7LX772.jpg" };
+	vector <LPCSTR> paths;
 	/*thread thread1 = thread(ChangeBackground(CreateDownloadPaths(urls)));
 	thread thread2 = thread(MinimizeCurrentWindow);
 	thread1.join();
 	thread2.join();
 	CreateDir();*/
-	vector<LPCSTR> paths = CreateDownloadPaths(urls);
+	CreateDownloadPaths(urls,paths);
 	cout << paths[0];
 	return 0;
 }
