@@ -41,6 +41,7 @@ string CreateDownloadPaths(vector<LPCSTR> urls)
 	}
 	return paths;
 }
+
 void ChangeBackground(const string &paths)
 {
 	u_int i = 0;
@@ -51,7 +52,7 @@ void ChangeBackground(const string &paths)
 	{
 		SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)vpaths[i%vpaths.size()].c_str(), SPIF_UPDATEINIFILE);
 		i++;
-		Sleep(1500);
+		Sleep(1250);
 	}
 }
 
