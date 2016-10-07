@@ -11,42 +11,47 @@
 #include <thread>
 
 #pragma comment(lib, "urlmon.lib")
+#pragma warning(disable : 4996)
 
 using namespace std;
 
-void CreateDownloadPaths(vector<LPCSTR> urls, vector<LPCSTR> &paths)
-{
-	for (u_int i = 0; i < urls.size(); i++)
-	{
-		char fp[20];
-		int n;
-		n = sprintf(fp, "D:\\img%d.jpg", i);
-		HRESULT hr = URLDownloadToFileA(NULL, urls[i], fp, 0, NULL);
-		if (SUCCEEDED(hr))
-		{
-			paths.push_back(fp);
-			cout << paths[i];
-			if (i > 0)
-			{
-				cout << paths[i - 1];
-			}
-		}
-	}
-	for (u_int i = 0; i < urls.size(); i++)
-	{
-		cout << paths[i];
+void split(const std::string &s, char delim, std::vector<string> &elems) {
+	std::stringstream ss;
+	ss.str(s);
+	std::string item;
+	while (std::getline(ss, item, delim)) {
+		elems.push_back(item);
 	}
 }
-void ChangeBackground(vector<LPCSTR> paths)
+
+string CreateDownloadPaths(vector<LPCSTR> urls)
+{
+	string paths;
+	for (u_int i = 0; i < urls.size(); i++)
+	{
+		stringstream fpStrm;
+		string fp;
+		fpStrm << "D:\\img" << i << ".jpg";
+		fp = fpStrm.str();
+		HRESULT hr = URLDownloadToFileA(NULL, urls[i], fp.c_str() , 0, NULL);
+		if (SUCCEEDED(hr))
+		{
+			paths += fp + ";";
+		}
+	}
+	return paths;
+}
+void ChangeBackground(const string &paths)
 {
 	u_int i = 0;
-//if (paths.size() > 0)
-//	cout << paths[0];
+	vector<string> vpaths;
+	split(paths, ';', vpaths);
+	cout << vpaths.size();
 	while (true)
 	{
-		SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)paths[i%paths.size()], SPIF_UPDATEINIFILE);
+		SystemParametersInfoA(SPI_SETDESKWALLPAPER, 0, (void*)vpaths[i%vpaths.size()].c_str(), SPIF_UPDATEINIFILE);
 		i++;
-		Sleep(500);
+		Sleep(1500);
 	}
 }
 
@@ -54,23 +59,19 @@ void MinimizeCurrentWindow()
 {	
 	while (true)
 	{
-		//ShowWindow(GetForegroundWindow(), SW_FORCEMINIMIZE);
 		CloseWindow(GetForegroundWindow());
 	}
 }
 
 int main()
 {
-	//FreeConsole();
+	FreeConsole();
 	vector<LPCSTR> urls = { "https://4.bp.blogspot.com/-TmA6nbLk9XQ/UxIoVsqYNLI/AAAAAAAAoRg/4rHuQWzbJdI/s0/Battlefield+4_HD.jpg", "https://images.alphacoders.com/505/505347.jpg", "http://www.mindblowingpicture.com/wp_highres/aviation/WP7LX772.jpg" };
-	vector <LPCSTR> paths;
-	/*thread thread1 = thread(ChangeBackground(CreateDownloadPaths(urls)));
-	thread thread2 = thread(MinimizeCurrentWindow);
+	string paths = CreateDownloadPaths(urls);
+	thread thread1(ChangeBackground,paths);
+	thread thread2(MinimizeCurrentWindow);
 	thread1.join();
-	thread2.join();
-	CreateDir();*/
-	CreateDownloadPaths(urls,paths);
-	cout << paths[0];
+	thread2.join();	
 	return 0;
 }
 
