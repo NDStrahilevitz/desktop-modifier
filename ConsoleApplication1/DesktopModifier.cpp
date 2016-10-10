@@ -50,8 +50,8 @@ string CreateDownloadPaths(vector<LPCSTR> urls, string drive)
 		if (SUCCEEDED(hr))
 		{
 			paths += fp + ";";
+			}
 		}
-	}
 	return paths;
 }
 
